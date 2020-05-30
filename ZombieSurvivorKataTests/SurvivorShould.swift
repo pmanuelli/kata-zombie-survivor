@@ -42,6 +42,13 @@ class SurvivorShould: XCTestCase {
         XCTAssertTrue(isAliveWithOneWound)
         XCTAssertFalse(isAliveWithTwoWounds)
     }
+    
+    func test_receiveTwoWoundsMaximum() {
+        
+        survivor = survivor.wound().wound().wound()
+        
+        XCTAssertEqual(2, survivor.wounds)
+    }
 }
 
 struct Survivor {
@@ -60,6 +67,6 @@ struct Survivor {
     }
     
     func wound() -> Survivor {
-        return Survivor(name: name, wounds: wounds + 1)
+        return Survivor(name: name, wounds: min(wounds + 1, 2))
     }
 }
