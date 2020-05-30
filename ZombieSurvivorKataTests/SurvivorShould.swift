@@ -27,14 +27,28 @@ class SurvivorShould: XCTestCase {
         survivor = survivor.wound()
         
         XCTAssertEqual(1, survivor.wounds)
-    }    
+    }
+    
+    func test_dieIfReceivesTwoWounds() {
+        
+        survivor = survivor.wound()
+        
+        let isAliveWithOneWound = survivor.isAlive
+        
+        survivor = survivor.wound()
+        
+        let isAliveWithTwoWounds = survivor.isAlive
+        
+        XCTAssertTrue(isAliveWithOneWound)
+        XCTAssertFalse(isAliveWithTwoWounds)
+    }
 }
 
 struct Survivor {
     
     let name: String
     let wounds: Int
-    let isAlive = true
+    var isAlive: Bool { wounds < 2 }
     
     init(name: String) {
         self.init(name: name, wounds: 0)
