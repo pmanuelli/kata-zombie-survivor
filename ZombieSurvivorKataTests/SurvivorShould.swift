@@ -12,9 +12,14 @@ class SurvivorShould: XCTestCase {
         XCTAssertEqual(survivorName, survivor.name)
     }
     
-    func test_haveNoInitialWounds() {
+    func test_beInitiallyUnwounded() {
                 
         XCTAssertEqual(0, survivor.wounds)
+    }
+    
+    func test_beInitiallyAlive() {
+        
+        XCTAssertTrue(survivor.isAlive)
     }
 }
 
@@ -22,4 +27,5 @@ struct Survivor {
     
     let name: String
     let wounds = 0
+    let isAlive = true
 }
