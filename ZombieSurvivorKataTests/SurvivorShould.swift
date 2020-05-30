@@ -49,6 +49,11 @@ class SurvivorShould: XCTestCase {
         
         XCTAssertEqual(2, survivor.wounds)
     }
+    
+    func test_beAbleToPerformThreeActionsPerTurn() {
+        
+        XCTAssertEqual(3, survivor.actionsPerTurn)
+    }
 }
 
 struct Survivor {
@@ -58,6 +63,7 @@ struct Survivor {
     let name: String
     let wounds: Int
     var isAlive: Bool { wounds < maximumWounds }
+    let actionsPerTurn = 3
     
     init(name: String) {
         self.init(name: name, wounds: 0)
