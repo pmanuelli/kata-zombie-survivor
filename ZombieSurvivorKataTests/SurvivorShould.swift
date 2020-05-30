@@ -5,18 +5,15 @@ import XCTest
 class SurvivorShould: XCTestCase {
 
     private let survivorName = "Chuker"
+    private lazy var survivor = Survivor(name: survivorName)
     
     func test_haveAName() {
-        
-        let survivor = Survivor(name: survivorName)
         
         XCTAssertEqual(survivorName, survivor.name)
     }
     
     func test_haveNoInitialWounds() {
-        
-        let survivor = Survivor(name: survivorName)
-        
+                
         XCTAssertEqual(0, survivor.wounds)
     }
 }
