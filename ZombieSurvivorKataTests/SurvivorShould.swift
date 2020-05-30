@@ -53,9 +53,11 @@ class SurvivorShould: XCTestCase {
 
 struct Survivor {
     
+    private let maximumWounds = 2
+    
     let name: String
     let wounds: Int
-    var isAlive: Bool { wounds < 2 }
+    var isAlive: Bool { wounds < maximumWounds }
     
     init(name: String) {
         self.init(name: name, wounds: 0)
@@ -67,6 +69,6 @@ struct Survivor {
     }
     
     func wound() -> Survivor {
-        return Survivor(name: name, wounds: min(wounds + 1, 2))
+        return Survivor(name: name, wounds: min(wounds + 1, maximumWounds))
     }
 }
