@@ -72,7 +72,7 @@ class SurvivorShould: XCTestCase {
     
     func test_carryUpToTwoEquipmentsInHandAndTheRestInReserve() {
         
-        survivor = survivor.carry(baseballBat).carry(fryingPan).carry(katana)
+        survivor = aSurvivorCarring(equipments: baseballBat, fryingPan, katana)
         
         XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
         XCTAssertEqual([katana], survivor.inReserveEquipments)
@@ -85,7 +85,7 @@ class SurvivorShould: XCTestCase {
         XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
         XCTAssertEqual([katana, pistol, bottledWater], survivor.inReserveEquipments)
     }
-    
+        
     private func aSurvivorCarring(equipments: Equipment...) -> Survivor {
         
         var survivor = Survivor(name: "Maroon")
