@@ -94,7 +94,16 @@ class SurvivorShould: XCTestCase {
         XCTAssertEqual(2, survivor.inHandEquipments.count)
         XCTAssertEqual(2, survivor.inReserveEquipments.count)
     }
-            
+    
+    func test_notDiscardEquipmentWhenWoundedIfHasEnoughCapacity() {
+        
+        survivor = carry(equipmentsCount: 4, to: survivor)
+        survivor = survivor.wound()
+        
+        XCTAssertEqual(2, survivor.inHandEquipments.count)
+        XCTAssertEqual(2, survivor.inReserveEquipments.count)
+    }
+                
     private func carry(equipments: [Equipment], to survivor: Survivor) -> Survivor {
         
         var newSurvivor = survivor
