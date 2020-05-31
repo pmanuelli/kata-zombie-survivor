@@ -11,6 +11,13 @@ class EquipmentsShould: XCTestCase {
         XCTAssertEqual([], equipments.equipments)
     }
     
+    func test_haveAMaximumCapacity() {
+        
+        let equipments = Equipments(maximumCapacity: 3)
+        
+        XCTAssertEqual(3, equipments.maximumCapacity)
+    }
+    
     func test_addEquipment() {
         
         var equipments = Equipments(maximumCapacity: 1)
@@ -24,6 +31,7 @@ class EquipmentsShould: XCTestCase {
     func test_addEquipmentUpToMaximumCapacity() {
         
         var equipments = Equipments(maximumCapacity: 2)
+        
         let baseballBat = Equipment(name: "Baseball Bat")
         let fryingPan = Equipment(name: "FryingPan")
         let katana = Equipment(name: "Katana")
