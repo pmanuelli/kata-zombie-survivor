@@ -40,6 +40,15 @@ class EquipmentsShould: XCTestCase {
         
         XCTAssertEqual([baseballBat, fryingPan], equipments.equipments)
     }
+    
+    func test_reduceMaximumCapacityByOne() {
+        
+        var equipments = Equipments(maximumCapacity: 3)
+        
+        equipments = equipments.reduceMaximumCapacityByOne()
+        
+        XCTAssertEqual(2, equipments.maximumCapacity)
+    }
 }
 
 struct Equipments {
@@ -66,6 +75,10 @@ struct Equipments {
     
     private func haveRoomLeft() -> Bool {
         return equipments.count < maximumCapacity
+    }
+    
+    func reduceMaximumCapacityByOne() -> Equipments {
+        return Equipments(maximumCapacity: maximumCapacity - 1, equipments: equipments)
     }
 }
 
