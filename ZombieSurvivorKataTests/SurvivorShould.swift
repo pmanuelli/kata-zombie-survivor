@@ -60,25 +60,13 @@ class SurvivorShould: XCTestCase {
         let baseballBat = Equipment(name: "Baseball Bat")
         let fryingPan = Equipment(name: "Frying Pan")
         
-        survivor = survivor.carryInReserve(baseballBat).carryInReserve(fryingPan)
+        survivor = survivor.carry(baseballBat).carry(fryingPan)
         
         let inReserveEquipments = survivor.inReserveEquipments
         
         XCTAssertTrue(inReserveEquipments.contains(baseballBat))
         XCTAssertTrue(inReserveEquipments.contains(fryingPan))
         XCTAssertEqual(2, inReserveEquipments.count)
-    }
-    
-    func test_carryEquipmentInHand() {
-        
-        let baseballBat = Equipment(name: "Baseball Bat")
-        
-        survivor = survivor.carryInHand(baseballBat)
-        
-        let inHandEquipments = survivor.inHandEquipments
-        
-        XCTAssertTrue(inHandEquipments.contains(baseballBat))
-        XCTAssertEqual(1, inHandEquipments.count)
     }
 }
 
@@ -111,18 +99,11 @@ struct Survivor {
                         inHandEquipments: inHandEquipments)
     }
     
-    func carryInReserve(_ equipment: Equipment) -> Survivor {
+    func carry(_ equipment: Equipment) -> Survivor {
         return Survivor(name: name,
                         wounds: wounds,
                         inReserveEquipments: inReserveEquipments + [equipment],
                         inHandEquipments: inHandEquipments)
-    }
-    
-    func carryInHand(_ equipment: Equipment) -> Survivor {
-        return Survivor(name: name,
-                        wounds: wounds,
-                        inReserveEquipments: inReserveEquipments,
-                        inHandEquipments: inHandEquipments + [equipment])
     }
 }
 
