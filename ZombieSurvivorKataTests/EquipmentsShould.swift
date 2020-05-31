@@ -5,17 +5,10 @@ import XCTest
 class EquipmentsShould: XCTestCase {
 
     private var equipments = Equipments()
-    
-    private let baseballBat = Equipment(name: "Baseball Bat")
-    private let fryingPan = Equipment(name: "FryingPan")
-    private let katana = Equipment(name: "Katana")
-    private let pistol = Equipment(name: "Pistol")
-    private let bottledWater = Equipment(name: "Bottled Water")
-    private let molotov = Equipment(name: "Molotov")
-    
+        
     func test_beInitiallyEmpty() {
              
-        XCTAssertEqual([], equipments.pieces)
+        XCTAssertTrue(equipments.pieces.isEmpty)
     }
     
     func test_haveAInitialMaximumCapacityOfFive() {
@@ -24,7 +17,9 @@ class EquipmentsShould: XCTestCase {
     }
     
     func test_addEquipment() {
-                
+        
+        let baseballBat = Equipment(name: "Baseball Bat")
+        
         equipments = equipments.add(baseballBat)
         
         XCTAssertEqual([baseballBat], equipments.pieces)
@@ -32,15 +27,9 @@ class EquipmentsShould: XCTestCase {
     
     func test_addEquipmentUpToMaximumCapacity() {
                 
-        equipments = equipments
-            .add(baseballBat)
-            .add(fryingPan)
-            .add(katana)
-            .add(pistol)
-            .add(bottledWater)
-            .add(molotov)
+        equipments = addEquipments(cuantity: 6, to: equipments)
         
-        XCTAssertEqual([baseballBat, fryingPan, katana, pistol, bottledWater], equipments.pieces)
+        XCTAssertEqual(5, equipments.pieces.count)
     }
     
     func test_reduceMaximumCapacityByOne() {
@@ -55,6 +44,17 @@ class EquipmentsShould: XCTestCase {
 
         XCTAssertEqual(4, maximumCapacityReducedByOne)
         XCTAssertEqual(3, maximumCapacityReducedByTwo)
+    }
+    
+    private func addEquipments(cuantity: Int, to equipments: Equipments) -> Equipments {
+        
+        var newEquipments = equipments
+        
+        for equipmentNumber in 1...cuantity {
+            newEquipments = newEquipments.add(Equipment(name: "Equipment \(equipmentNumber)"))
+        }
+        
+        return newEquipments
     }
 }
 
