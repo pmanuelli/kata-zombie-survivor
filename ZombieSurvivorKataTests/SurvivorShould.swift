@@ -103,6 +103,16 @@ class SurvivorShould: XCTestCase {
         XCTAssertEqual(2, survivor.inHandEquipments.count)
         XCTAssertEqual(2, survivor.inReserveEquipments.count)
     }
+    
+    func test_discardLastEquipmentWhenWoundedAtFullCapacity() {
+        
+        survivor = carry(equipments: [baseballBat, fryingPan, katana, pistol, bottledWater], to: survivor)
+        survivor = survivor.wound()
+        
+        XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
+        XCTAssertEqual([katana, pistol], survivor.inReserveEquipments)
+
+    }
                 
     private func carry(equipments: [Equipment], to survivor: Survivor) -> Survivor {
         
@@ -152,17 +162,20 @@ struct Survivor {
     }
     
     func wound() -> Survivor {
+        
+        let newWounds = min(wounds + 1, maximumWounds)
+        
         return Survivor(name: name,
-                        wounds: min(wounds + 1, maximumWounds),
+                        wounds: newWounds,
                         inHandEquipments: inHandEquipments,
-                        inReserveEquipments: inReserveEquipments)
+                        inReserveEquipments: createInReserveEquipmentsRemovingExceededEquipment(wounds: newWounds))
     }
     
     func carry(_ equipment: Equipment) -> Survivor {
         return Survivor(name: name,
                         wounds: wounds,
                         inHandEquipments: createInHandEquipmentsAddingEquipment(equipment),
-                        inReserveEquipments: createInReserveEquipmentsAddingEquipment(equipment))
+                        inReserveEquipments: createInReserveEquipmentsAddingEquipment(equipment, wounds: wounds))
     }
     
     private func createInHandEquipmentsAddingEquipment(_ equipment: Equipment) -> [Equipment] {
@@ -173,12 +186,24 @@ struct Survivor {
         return inHandEquipments.count < maximumInHandEquipments
     }
     
-    private func createInReserveEquipmentsAddingEquipment(_ equipment: Equipment) -> [Equipment] {
-        return inReserveEquipments + (canCarryNewEquipmentInReserve() ? [equipment] : [])
+    private func createInReserveEquipmentsAddingEquipment(_ equipment: Equipment, wounds: Int) -> [Equipment] {
+        return inReserveEquipments + (canCarryNewEquipmentInReserve(wounds: wounds) ? [equipment] : [])
     }
 
-    private func canCarryNewEquipmentInReserve() -> Bool {
-        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < maximumEquipments - wounds - maximumInHandEquipments
+    private func canCarryNewEquipmentInReserve(wounds: Int) -> Bool {
+        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < inReserveEquipmentsCapacity(wounds: wounds)
+    }
+    
+    private func inReserveEquipmentsCapacity(wounds: Int) -> Int {
+        return maximumEquipments - maximumInHandEquipments - wounds
+    }
+    
+    private func isInReserveEquipmentsCapacityExceeded(wounds: Int) -> Bool {
+        return inReserveEquipments.count > inReserveEquipmentsCapacity(wounds: wounds)
+    }
+    
+    private func createInReserveEquipmentsRemovingExceededEquipment(wounds: Int) -> [Equipment] {
+        return isInReserveEquipmentsCapacityExceeded(wounds: wounds) ? inReserveEquipments.dropLast() : inReserveEquipments
     }
 }
 
