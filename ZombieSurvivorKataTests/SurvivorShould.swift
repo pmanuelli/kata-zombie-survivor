@@ -101,6 +101,8 @@ class SurvivorShould: XCTestCase {
 struct Survivor {
     
     private let maximumWounds = 2
+    private let maximumInHandEquipments = 2
+    private let maximumEquipments = 5
     
     let name: String
     let wounds: Int
@@ -129,14 +131,27 @@ struct Survivor {
     
     func carry(_ equipment: Equipment) -> Survivor {
         
-        let allEquipment = inHandEquipments + inReserveEquipments + [equipment]
-        let inHandEquipment = Array(allEquipment.prefix(2))
-        let inReserveEquipment = Array(allEquipment.dropFirst(2).prefix(3))
+        var inHandEquipments = self.inHandEquipments
+        var inReserveEquipments = self.inReserveEquipments
         
+        if canAddNewEquipmentToInHand() {
+            inHandEquipments = inHandEquipments + [equipment]
+        } else if canAddNewEquipment() {
+            inReserveEquipments = inReserveEquipments + [equipment]
+        }
+               
         return Survivor(name: name,
                         wounds: wounds,
-                        inHandEquipments: inHandEquipment,
-                        inReserveEquipments: inReserveEquipment)
+                        inHandEquipments: inHandEquipments,
+                        inReserveEquipments: inReserveEquipments)
+    }
+    
+    private func canAddNewEquipment() -> Bool {
+        return inHandEquipments.count + inReserveEquipments.count < maximumEquipments
+    }
+    
+    private func canAddNewEquipmentToInHand() -> Bool {
+        return inHandEquipments.count < maximumInHandEquipments
     }
 }
 
