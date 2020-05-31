@@ -15,7 +15,7 @@ class EquipmentsShould: XCTestCase {
     
     func test_beInitiallyEmpty() {
              
-        XCTAssertEqual([], equipments.equipments)
+        XCTAssertEqual([], equipments.pieces)
     }
     
     func test_haveAInitialMaximumCapacityOfFive() {
@@ -27,7 +27,7 @@ class EquipmentsShould: XCTestCase {
                 
         equipments = equipments.add(baseballBat)
         
-        XCTAssertEqual([baseballBat], equipments.equipments)
+        XCTAssertEqual([baseballBat], equipments.pieces)
     }
     
     func test_addEquipmentUpToMaximumCapacity() {
@@ -40,7 +40,7 @@ class EquipmentsShould: XCTestCase {
             .add(bottledWater)
             .add(molotov)
         
-        XCTAssertEqual([baseballBat, fryingPan, katana, pistol, bottledWater], equipments.equipments)
+        XCTAssertEqual([baseballBat, fryingPan, katana, pistol, bottledWater], equipments.pieces)
     }
     
     func test_reduceMaximumCapacityByOne() {
@@ -60,32 +60,32 @@ class EquipmentsShould: XCTestCase {
 
 struct Equipments {
     
-    let equipments: [Equipment]
     let maximumCapacity: Int
+    let pieces: [Equipment]
         
     init() {
-        self.init(maximumCapacity: 5, equipments: [])
+        self.init(maximumCapacity: 5, pieces: [])
     }
     
-    private init(maximumCapacity: Int, equipments: [Equipment]) {
+    private init(maximumCapacity: Int, pieces: [Equipment]) {
         self.maximumCapacity = maximumCapacity
-        self.equipments = equipments
+        self.pieces = pieces
     }
     
     func add(_ equipment: Equipment) -> Equipments {
-        return Equipments(maximumCapacity: maximumCapacity, equipments: createEquipmentsAdding(equipment))
+        return Equipments(maximumCapacity: maximumCapacity, pieces: createPiecesAdding(equipment))
     }
     
-    private func createEquipmentsAdding(_ equipment: Equipment) -> [Equipment] {
-        return haveRoomLeft() ? equipments + [equipment] : equipments
+    private func createPiecesAdding(_ equipment: Equipment) -> [Equipment] {
+        return haveRoomLeft() ? pieces + [equipment] : pieces
     }
     
     private func haveRoomLeft() -> Bool {
-        return equipments.count < maximumCapacity
+        return pieces.count < maximumCapacity
     }
     
     func reduceMaximumCapacityByOne() -> Equipments {
-        return Equipments(maximumCapacity: maximumCapacity - 1, equipments: equipments)
+        return Equipments(maximumCapacity: maximumCapacity - 1, pieces: pieces)
     }
 }
 
