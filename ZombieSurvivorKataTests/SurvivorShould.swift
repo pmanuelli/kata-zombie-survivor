@@ -68,6 +68,18 @@ class SurvivorShould: XCTestCase {
         XCTAssertEqual(1, inHandEquipments.count)
         XCTAssertTrue(inReserveEquipments.isEmpty)
     }
+    
+    func test_carryUpToTwoEquipmentsInHandAndTheRestInReserve() {
+        
+        let baseballBat = Equipment(name: "Baseball Bat")
+        let fryingPan = Equipment(name: "FryingPan")
+        let katana = Equipment(name: "Katana")
+        
+        survivor = survivor.carry(baseballBat).carry(fryingPan).carry(katana)
+        
+        XCTAssertEqual(survivor.inHandEquipments, [baseballBat, fryingPan])
+        XCTAssertEqual(survivor.inReserveEquipments, [katana])
+    }
 }
 
 struct Survivor {
@@ -100,10 +112,22 @@ struct Survivor {
     }
     
     func carry(_ equipment: Equipment) -> Survivor {
-        return Survivor(name: name,
-                        wounds: wounds,
-                        inReserveEquipments: inReserveEquipments,
-                        inHandEquipments: inHandEquipments + [equipment])
+        
+        if inHandEquipments.count < 2 {
+            
+            return Survivor(name: name,
+                            wounds: wounds,
+                            inReserveEquipments: inReserveEquipments,
+                            inHandEquipments: inHandEquipments + [equipment])
+            
+        } else {
+            
+            return Survivor(name: name,
+                            wounds: wounds,
+                            inReserveEquipments: inReserveEquipments + [equipment],
+                            inHandEquipments: inHandEquipments)
+            
+        }
     }
 }
 
