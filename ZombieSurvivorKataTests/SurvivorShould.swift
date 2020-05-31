@@ -4,6 +4,13 @@ import XCTest
 
 class SurvivorShould: XCTestCase {
 
+    private let baseballBat = Equipment(name: "Baseball Bat")
+    private let fryingPan = Equipment(name: "FryingPan")
+    private let katana = Equipment(name: "Katana")
+    private let pistol = Equipment(name: "Pistol")
+    private let bottledWater = Equipment(name: "Bottled Water")
+    private let molotov = Equipment(name: "Molotov")
+    
     private let survivorName = "Chuker"
     private lazy var survivor = Survivor(name: survivorName)
     
@@ -56,9 +63,7 @@ class SurvivorShould: XCTestCase {
     }
     
     func test_carryEquipmentInHand() {
-        
-        let baseballBat = Equipment(name: "Baseball Bat")
-        
+                
         survivor = survivor.carry(baseballBat)
                 
         XCTAssertEqual([baseballBat], survivor.inHandEquipments)
@@ -67,14 +72,29 @@ class SurvivorShould: XCTestCase {
     
     func test_carryUpToTwoEquipmentsInHandAndTheRestInReserve() {
         
-        let baseballBat = Equipment(name: "Baseball Bat")
-        let fryingPan = Equipment(name: "FryingPan")
-        let katana = Equipment(name: "Katana")
-        
         survivor = survivor.carry(baseballBat).carry(fryingPan).carry(katana)
         
         XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
         XCTAssertEqual([katana], survivor.inReserveEquipments)
+    }
+    
+    func test_carryUpToFiveEquipments() {
+        
+        survivor = aSurvivorCarring(equipments: baseballBat, fryingPan, katana, pistol, bottledWater, molotov)
+        
+        XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
+        XCTAssertEqual([katana, pistol, bottledWater], survivor.inReserveEquipments)
+    }
+    
+    private func aSurvivorCarring(equipments: Equipment...) -> Survivor {
+        
+        var survivor = Survivor(name: "Maroon")
+        
+        for equipment in equipments {
+            survivor = survivor.carry(equipment)
+        }
+        
+        return survivor
     }
 }
 
@@ -111,7 +131,7 @@ struct Survivor {
         
         let allEquipment = inHandEquipments + inReserveEquipments + [equipment]
         let inHandEquipment = Array(allEquipment.prefix(2))
-        let inReserveEquipment = Array(allEquipment.dropFirst(2))
+        let inReserveEquipment = Array(allEquipment.dropFirst(2).prefix(3))
         
         return Survivor(name: name,
                         wounds: wounds,
