@@ -140,76 +140,51 @@ class SurvivorShould: XCTestCase {
 struct Survivor {
     
     private let maximumWounds = 2
-    private let maximumInHandEquipmentsCapacity = 2
-    private let maximumEquipmentsCapacity = 5
+    private let maximumInHandEquipments = 2
     
     let name: String
     let wounds: Int
     var isAlive: Bool { wounds < maximumWounds }
     let actionsPerTurn = 3
-    let inHandEquipments: [Equipment]
-    let inReserveEquipments: [Equipment]
+    
+    private let equipments: Equipments
+    
+    var inHandEquipments: [Equipment] { createInHandEquipments() }
+    var inReserveEquipments: [Equipment] { createInReserveEquipments() }
     
     init(name: String) {
-        self.init(name: name, wounds: 0, inHandEquipments: [], inReserveEquipments: [])
+        self.init(name: name, wounds: 0, equipments: Equipments())
     }
     
-    private init(name: String, wounds: Int, inHandEquipments: [Equipment], inReserveEquipments: [Equipment]) {
+    private init(name: String, wounds: Int, equipments: Equipments) {
         self.name = name
         self.wounds = wounds
-        self.inHandEquipments = inHandEquipments
-        self.inReserveEquipments = inReserveEquipments
+        self.equipments = equipments
     }
     
     func wound() -> Survivor {
                 
         return Survivor(name: name,
                         wounds: increasedWounds(),
-                        inHandEquipments: inHandEquipments,
-                        inReserveEquipments: inReserveEquipmentsRemovingExceededEquipment(wounds: increasedWounds()))
+                        equipments: equipments.reduceMaximumCapacityByOne())
     }
     
     private func increasedWounds() -> Int {
         return min(wounds + 1, maximumWounds)
     }
     
-    private func inReserveEquipmentsRemovingExceededEquipment(wounds: Int) -> [Equipment] {
-        return isInReserveEquipmentsCapacityExceeded(wounds: wounds) ? inReserveEquipments.dropLast() : inReserveEquipments
-    }
-    
-    private func isInReserveEquipmentsCapacityExceeded(wounds: Int) -> Bool {
-        return inReserveEquipments.count > calculateInReserveEquipmentsCapacity(wounds: wounds)
-    }
-    
     func carry(_ equipment: Equipment) -> Survivor {
         
         return Survivor(name: name,
                         wounds: wounds,
-                        inHandEquipments: createInHandEquipmentsAddingEquipment(equipment),
-                        inReserveEquipments: createInReserveEquipmentsAddingEquipment(equipment, wounds: wounds))
+                        equipments: equipments.add(equipment))
     }
     
-    private func createInHandEquipmentsAddingEquipment(_ equipment: Equipment) -> [Equipment] {
-        return inHandEquipments + (canCarryNewEquipmentInHand() ? [equipment] : [])
+    private func createInHandEquipments() -> [Equipment] {
+        return Array(equipments.pieces.prefix(maximumInHandEquipments))
     }
     
-    private func canCarryNewEquipmentInHand() -> Bool {
-        return inHandEquipments.count < maximumInHandEquipmentsCapacity
-    }
-    
-    private func createInReserveEquipmentsAddingEquipment(_ equipment: Equipment, wounds: Int) -> [Equipment] {
-        return inReserveEquipments + (canCarryNewEquipmentInReserve(wounds: wounds) ? [equipment] : [])
-    }
-
-    private func canCarryNewEquipmentInReserve(wounds: Int) -> Bool {
-        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < calculateInReserveEquipmentsCapacity(wounds: wounds)
-    }
-    
-    private func calculateInReserveEquipmentsCapacity(wounds: Int) -> Int {
-        return calculateEquipmentCapacity(wounds: wounds) - maximumInHandEquipmentsCapacity
-    }
-    
-    private func calculateEquipmentCapacity(wounds: Int) -> Int {
-        return maximumEquipmentsCapacity - wounds
+    private func createInReserveEquipments() -> [Equipment] {
+        return Array(equipments.pieces.dropFirst(maximumInHandEquipments))
     }
 }

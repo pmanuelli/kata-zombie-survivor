@@ -55,7 +55,7 @@ class EquipmentsShould: XCTestCase {
 
         XCTAssertEqual(pieces.dropLast(), equipments.pieces)
     }
-    
+        
     private func createPieces(cuantity: Int) -> [Equipment] {
         
         var result = [Equipment]()
