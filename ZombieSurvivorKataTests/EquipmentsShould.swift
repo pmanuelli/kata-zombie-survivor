@@ -6,14 +6,14 @@ class EquipmentsShould: XCTestCase {
 
     func test_beInitiallyEmpty() {
         
-        let equipments = Equipments()
+        let equipments = Equipments(maximumCapacity: 1)
      
         XCTAssertEqual([], equipments.equipments)
     }
     
     func test_addEquipment() {
         
-        var equipments = Equipments()
+        var equipments = Equipments(maximumCapacity: 1)
         let baseballBat = Equipment(name: "Baseball Bat")
         
         equipments = equipments.add(baseballBat)
@@ -38,11 +38,7 @@ struct Equipments {
     
     let equipments: [Equipment]
     let maximumCapacity: Int
-    
-    init() {
-        self.init(maximumCapacity: 5, equipments: [])
-    }
-    
+        
     init(maximumCapacity: Int) {
         self.init(maximumCapacity: maximumCapacity, equipments: [])
     }
