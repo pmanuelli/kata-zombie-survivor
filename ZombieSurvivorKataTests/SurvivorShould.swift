@@ -54,6 +54,16 @@ class SurvivorShould: XCTestCase {
         
         XCTAssertEqual(3, survivor.actionsPerTurn)
     }
+    
+    func test_carryEquipment() {
+        
+        let baseballBat = Equipment(name: "Baseball Bat")
+        let fryingPan = Equipment(name: "Frying Pan")
+        
+        survivor = survivor.carry(baseballBat).carry(fryingPan)
+        
+        XCTAssertEqual([baseballBat, fryingPan], survivor.equipments)
+    }
 }
 
 struct Survivor {
@@ -64,17 +74,28 @@ struct Survivor {
     let wounds: Int
     var isAlive: Bool { wounds < maximumWounds }
     let actionsPerTurn = 3
+    let equipments: [Equipment]
     
     init(name: String) {
-        self.init(name: name, wounds: 0)
+        self.init(name: name, wounds: 0, equipments: [])
     }
     
-    private init(name: String, wounds: Int) {
+    private init(name: String, wounds: Int, equipments: [Equipment]) {
         self.name = name
         self.wounds = wounds
+        self.equipments = equipments
     }
     
     func wound() -> Survivor {
-        return Survivor(name: name, wounds: min(wounds + 1, maximumWounds))
+        return Survivor(name: name, wounds: min(wounds + 1, maximumWounds), equipments: equipments)
     }
+    
+    func carry(_ equipment: Equipment) -> Survivor {
+        return Survivor(name: name, wounds: wounds, equipments: equipments + [equipment])
+    }
+}
+
+struct Equipment: Equatable {
+    
+    let name: String
 }
