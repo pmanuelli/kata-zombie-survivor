@@ -4,50 +4,57 @@ import XCTest
 
 class EquipmentsShould: XCTestCase {
 
+    private var equipments = Equipments()
+    
+    private let baseballBat = Equipment(name: "Baseball Bat")
+    private let fryingPan = Equipment(name: "FryingPan")
+    private let katana = Equipment(name: "Katana")
+    private let pistol = Equipment(name: "Pistol")
+    private let bottledWater = Equipment(name: "Bottled Water")
+    private let molotov = Equipment(name: "Molotov")
+    
     func test_beInitiallyEmpty() {
-        
-        let equipments = Equipments(maximumCapacity: 1)
-     
+             
         XCTAssertEqual([], equipments.equipments)
     }
     
-    func test_haveAMaximumCapacity() {
-        
-        let equipments = Equipments(maximumCapacity: 3)
-        
-        XCTAssertEqual(3, equipments.maximumCapacity)
+    func test_haveAInitialMaximumCapacityOfFive() {
+                
+        XCTAssertEqual(5, equipments.maximumCapacity)
     }
     
     func test_addEquipment() {
-        
-        var equipments = Equipments(maximumCapacity: 1)
-        let baseballBat = Equipment(name: "Baseball Bat")
-        
+                
         equipments = equipments.add(baseballBat)
         
         XCTAssertEqual([baseballBat], equipments.equipments)
     }
     
     func test_addEquipmentUpToMaximumCapacity() {
+                
+        equipments = equipments
+            .add(baseballBat)
+            .add(fryingPan)
+            .add(katana)
+            .add(pistol)
+            .add(bottledWater)
+            .add(molotov)
         
-        var equipments = Equipments(maximumCapacity: 2)
-        
-        let baseballBat = Equipment(name: "Baseball Bat")
-        let fryingPan = Equipment(name: "FryingPan")
-        let katana = Equipment(name: "Katana")
-        
-        equipments = equipments.add(baseballBat).add(fryingPan).add(katana)
-        
-        XCTAssertEqual([baseballBat, fryingPan], equipments.equipments)
+        XCTAssertEqual([baseballBat, fryingPan, katana, pistol, bottledWater], equipments.equipments)
     }
     
     func test_reduceMaximumCapacityByOne() {
-        
-        var equipments = Equipments(maximumCapacity: 3)
+                
+        equipments = equipments.reduceMaximumCapacityByOne()
+
+        let maximumCapacityReducedByOne = equipments.maximumCapacity
         
         equipments = equipments.reduceMaximumCapacityByOne()
-        
-        XCTAssertEqual(2, equipments.maximumCapacity)
+
+        let maximumCapacityReducedByTwo = equipments.maximumCapacity
+
+        XCTAssertEqual(4, maximumCapacityReducedByOne)
+        XCTAssertEqual(3, maximumCapacityReducedByTwo)
     }
 }
 
@@ -56,8 +63,8 @@ struct Equipments {
     let equipments: [Equipment]
     let maximumCapacity: Int
         
-    init(maximumCapacity: Int) {
-        self.init(maximumCapacity: maximumCapacity, equipments: [])
+    init() {
+        self.init(maximumCapacity: 5, equipments: [])
     }
     
     private init(maximumCapacity: Int, equipments: [Equipment]) {
