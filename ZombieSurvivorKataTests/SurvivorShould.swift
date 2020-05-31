@@ -68,6 +68,18 @@ class SurvivorShould: XCTestCase {
         XCTAssertTrue(equipments.contains(fryingPan))
         XCTAssertEqual(2, equipments.count)
     }
+    
+    func test_carryEquipmentInHand() {
+        
+        let baseballBat = Equipment(name: "Baseball Bat")
+        
+        survivor = survivor.carryInHand(baseballBat)
+        
+        let inHandEquipments = survivor.inHandEquipments
+        
+        XCTAssertTrue(inHandEquipments.contains(baseballBat))
+        XCTAssertEqual(1, inHandEquipments.count)
+    }
 }
 
 struct Survivor {
@@ -79,23 +91,29 @@ struct Survivor {
     var isAlive: Bool { wounds < maximumWounds }
     let actionsPerTurn = 3
     let equipments: [Equipment]
+    let inHandEquipments: [Equipment]
     
     init(name: String) {
-        self.init(name: name, wounds: 0, equipments: [])
+        self.init(name: name, wounds: 0, equipments: [], inHandEquipments: [])
     }
     
-    private init(name: String, wounds: Int, equipments: [Equipment]) {
+    private init(name: String, wounds: Int, equipments: [Equipment], inHandEquipments: [Equipment]) {
         self.name = name
         self.wounds = wounds
         self.equipments = equipments
+        self.inHandEquipments = inHandEquipments
     }
     
     func wound() -> Survivor {
-        return Survivor(name: name, wounds: min(wounds + 1, maximumWounds), equipments: equipments)
+        return Survivor(name: name, wounds: min(wounds + 1, maximumWounds), equipments: equipments, inHandEquipments: inHandEquipments)
     }
     
     func carry(_ equipment: Equipment) -> Survivor {
-        return Survivor(name: name, wounds: wounds, equipments: equipments + [equipment])
+        return Survivor(name: name, wounds: wounds, equipments: equipments + [equipment], inHandEquipments: inHandEquipments)
+    }
+    
+    func carryInHand(_ equipment: Equipment) -> Survivor {
+        return Survivor(name: name, wounds: wounds, equipments: equipments, inHandEquipments: inHandEquipments + [equipment])
     }
 }
 
