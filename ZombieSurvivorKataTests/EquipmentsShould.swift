@@ -49,14 +49,15 @@ struct Equipments {
     }
     
     func add(_ equipment: Equipment) -> Equipments {
-        
-        var equipments = self.equipments
-        
-        if equipments.count < maximumCapacity {
-            equipments = equipments + [equipment]
-        }
-        
-        return Equipments(maximumCapacity: maximumCapacity, equipments: equipments)
+        return Equipments(maximumCapacity: maximumCapacity, equipments: createEquipmentsAdding(equipment))
+    }
+    
+    private func createEquipmentsAdding(_ equipment: Equipment) -> [Equipment] {
+        return haveRoomLeft() ? equipments + [equipment] : equipments
+    }
+    
+    private func haveRoomLeft() -> Bool {
+        return equipments.count < maximumCapacity
     }
 }
 
