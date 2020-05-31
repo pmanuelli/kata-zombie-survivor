@@ -8,23 +8,22 @@ class EquipmentsShould: XCTestCase {
         
         let equipments = Equipments()
      
-        XCTAssertEqual(0, equipments.usedCapacity)
+        XCTAssertEqual([], equipments.equipments)
     }
     
     func test_addEquipment() {
         
         var equipments = Equipments()
-        let equipment = Equipment(name: "Baseball Bat")
+        let baseballBat = Equipment(name: "Baseball Bat")
         
-        equipments = equipments.add(equipment)
+        equipments = equipments.add(baseballBat)
         
-        XCTAssertEqual(1, equipments.usedCapacity)
+        XCTAssertEqual([baseballBat], equipments.equipments)
     }
 }
 
 struct Equipments {
     
-    var usedCapacity: Int { equipments.count }
     let equipments: [Equipment]
     
     init() {
