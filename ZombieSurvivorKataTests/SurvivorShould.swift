@@ -213,8 +213,3 @@ struct Survivor {
         return maximumEquipmentsCapacity - wounds
     }
 }
-
-struct Equipment: Equatable {
-    
-    let name: String
-}
