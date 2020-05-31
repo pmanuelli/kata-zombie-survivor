@@ -85,6 +85,25 @@ class SurvivorShould: XCTestCase {
         XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
         XCTAssertEqual([katana, pistol, bottledWater], survivor.inReserveEquipments)
     }
+    
+    func test_carryUpToFourEquipmentsIfWoundedOnce() {
+        
+        survivor = aSurvivor().wound()
+        
+        survivor = survivor
+            .carry(baseballBat)
+            .carry(fryingPan)
+            .carry(katana)
+            .carry(pistol)
+            .carry(bottledWater)
+        
+        XCTAssertEqual(survivor.inHandEquipments, [baseballBat, fryingPan])
+        XCTAssertEqual(survivor.inReserveEquipments, [katana, pistol])
+    }
+
+    private func aSurvivor() -> Survivor {
+        return Survivor(name: "Moulin")
+    }
         
     private func aSurvivorCarring(equipments: Equipment...) -> Survivor {
         
@@ -149,7 +168,7 @@ struct Survivor {
     }
 
     private func canCarryNewEquipmentInReserve() -> Bool {
-        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < maximumEquipments - maximumInHandEquipments
+        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < maximumEquipments - wounds - maximumInHandEquipments
     }
 }
 
