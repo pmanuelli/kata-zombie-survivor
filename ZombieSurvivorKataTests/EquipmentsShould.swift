@@ -26,8 +26,8 @@ class EquipmentsShould: XCTestCase {
     }
     
     func test_addEquipmentUpToMaximumCapacity() {
-                
-        equipments = addEquipments(cuantity: 6, to: equipments)
+        
+        equipments = addPieces(createPieces(cuantity: 6), to: equipments)
         
         XCTAssertEqual(5, equipments.pieces.count)
     }
@@ -46,12 +46,33 @@ class EquipmentsShould: XCTestCase {
         XCTAssertEqual(3, maximumCapacityReducedByTwo)
     }
     
-    private func addEquipments(cuantity: Int, to equipments: Equipments) -> Equipments {
+    func test_discardLastPieceWhenMaximumCapacityIsReducedAtFullCapacity() {
+
+        let pieces = createPieces(cuantity: 5)
+        equipments = addPieces(pieces, to: equipments)
+
+        equipments = equipments.reduceMaximumCapacityByOne()
+
+        XCTAssertEqual(pieces.dropLast(), equipments.pieces)
+    }
+    
+    private func createPieces(cuantity: Int) -> [Equipment] {
+        
+        var result = [Equipment]()
+        
+        for pieceNumber in 1...cuantity {
+            result = result + [Equipment(name: "Equipment \(pieceNumber)")]
+        }
+        
+        return result
+    }
+        
+    private func addPieces(_ pieces: [Equipment], to equipments: Equipments) -> Equipments {
         
         var newEquipments = equipments
         
-        for equipmentNumber in 1...cuantity {
-            newEquipments = newEquipments.add(Equipment(name: "Equipment \(equipmentNumber)"))
+        for equipment in pieces {
+            newEquipments = newEquipments.add(equipment)
         }
         
         return newEquipments
@@ -85,7 +106,17 @@ struct Equipments {
     }
     
     func reduceMaximumCapacityByOne() -> Equipments {
-        return Equipments(maximumCapacity: maximumCapacity - 1, pieces: pieces)
+        
+        return Equipments(maximumCapacity: decreasedCapacity(),
+                          pieces: createPieces(withCapacity: decreasedCapacity()))
+    }
+    
+    private func decreasedCapacity() -> Int {
+        return maximumCapacity - 1
+    }
+    
+    private func createPieces(withCapacity capacity: Int) -> [Equipment] {
+        return Array(pieces.prefix(capacity))
     }
 }
 
