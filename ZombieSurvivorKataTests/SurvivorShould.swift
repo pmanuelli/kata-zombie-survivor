@@ -140,8 +140,8 @@ class SurvivorShould: XCTestCase {
 struct Survivor {
     
     private let maximumWounds = 2
-    private let maximumInHandEquipments = 2
-    private let maximumEquipments = 5
+    private let maximumInHandEquipmentsCapacity = 2
+    private let maximumEquipmentsCapacity = 5
     
     let name: String
     let wounds: Int
@@ -162,16 +162,27 @@ struct Survivor {
     }
     
     func wound() -> Survivor {
-        
-        let newWounds = min(wounds + 1, maximumWounds)
-        
+                
         return Survivor(name: name,
-                        wounds: newWounds,
+                        wounds: increasedWounds(),
                         inHandEquipments: inHandEquipments,
-                        inReserveEquipments: createInReserveEquipmentsRemovingExceededEquipment(wounds: newWounds))
+                        inReserveEquipments: inReserveEquipmentsRemovingExceededEquipment(wounds: increasedWounds()))
+    }
+    
+    private func increasedWounds() -> Int {
+        return min(wounds + 1, maximumWounds)
+    }
+    
+    private func inReserveEquipmentsRemovingExceededEquipment(wounds: Int) -> [Equipment] {
+        return isInReserveEquipmentsCapacityExceeded(wounds: wounds) ? inReserveEquipments.dropLast() : inReserveEquipments
+    }
+    
+    private func isInReserveEquipmentsCapacityExceeded(wounds: Int) -> Bool {
+        return inReserveEquipments.count > calculateInReserveEquipmentsCapacity(wounds: wounds)
     }
     
     func carry(_ equipment: Equipment) -> Survivor {
+        
         return Survivor(name: name,
                         wounds: wounds,
                         inHandEquipments: createInHandEquipmentsAddingEquipment(equipment),
@@ -183,7 +194,7 @@ struct Survivor {
     }
     
     private func canCarryNewEquipmentInHand() -> Bool {
-        return inHandEquipments.count < maximumInHandEquipments
+        return inHandEquipments.count < maximumInHandEquipmentsCapacity
     }
     
     private func createInReserveEquipmentsAddingEquipment(_ equipment: Equipment, wounds: Int) -> [Equipment] {
@@ -191,19 +202,15 @@ struct Survivor {
     }
 
     private func canCarryNewEquipmentInReserve(wounds: Int) -> Bool {
-        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < inReserveEquipmentsCapacity(wounds: wounds)
+        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < calculateInReserveEquipmentsCapacity(wounds: wounds)
     }
     
-    private func inReserveEquipmentsCapacity(wounds: Int) -> Int {
-        return maximumEquipments - maximumInHandEquipments - wounds
+    private func calculateInReserveEquipmentsCapacity(wounds: Int) -> Int {
+        return calculateEquipmentCapacity(wounds: wounds) - maximumInHandEquipmentsCapacity
     }
     
-    private func isInReserveEquipmentsCapacityExceeded(wounds: Int) -> Bool {
-        return inReserveEquipments.count > inReserveEquipmentsCapacity(wounds: wounds)
-    }
-    
-    private func createInReserveEquipmentsRemovingExceededEquipment(wounds: Int) -> [Equipment] {
-        return isInReserveEquipmentsCapacityExceeded(wounds: wounds) ? inReserveEquipments.dropLast() : inReserveEquipments
+    private func calculateEquipmentCapacity(wounds: Int) -> Int {
+        return maximumEquipmentsCapacity - wounds
     }
 }
 
