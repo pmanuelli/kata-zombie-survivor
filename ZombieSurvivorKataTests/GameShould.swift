@@ -21,21 +21,41 @@ class GameShould: XCTestCase {
         XCTAssertEqual(1, gameWithOneSurvivor.numberOfSurvivors)
         XCTAssertEqual(2, gameWithTwoSurvivors.numberOfSurvivors)
     }
+    
+    func test_haveSurvivorsWithUniqueNames() {
+        
+        let survivorName = "Papita"
+        
+        var game = Game()
+        
+        game = game.addSurvivor(Survivor(name: survivorName))
+        game = game.addSurvivor(Survivor(name: survivorName))
+        
+        XCTAssertEqual(1, game.numberOfSurvivors)
+    }
 }
 
 struct Game {
     
-    let numberOfSurvivors: Int
+    private let survivors: [Survivor]
+    var numberOfSurvivors: Int { return survivors.count }
     
     init() {
-        self.init(numberOfSurvivors: 0)
+        self.init(survivors: [])
     }
     
-    private init(numberOfSurvivors: Int) {
-        self.numberOfSurvivors = numberOfSurvivors
+    private init(survivors: [Survivor]) {
+        self.survivors = survivors
     }
     
     func addSurvivor(_ survivor: Survivor) -> Game {
-        return Game(numberOfSurvivors: numberOfSurvivors + 1)
+        
+        var newSurvivors = survivors
+        
+        if !survivors.contains(where: { $0.name == survivor.name }) {
+            newSurvivors = newSurvivors + [survivor]
+        }
+        
+        return Game(survivors: newSurvivors)
     }
 }
