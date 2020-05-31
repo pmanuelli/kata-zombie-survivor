@@ -130,28 +130,26 @@ struct Survivor {
     }
     
     func carry(_ equipment: Equipment) -> Survivor {
-        
-        var inHandEquipments = self.inHandEquipments
-        var inReserveEquipments = self.inReserveEquipments
-        
-        if canAddNewEquipmentToInHand() {
-            inHandEquipments = inHandEquipments + [equipment]
-        } else if canAddNewEquipment() {
-            inReserveEquipments = inReserveEquipments + [equipment]
-        }
-               
         return Survivor(name: name,
                         wounds: wounds,
-                        inHandEquipments: inHandEquipments,
-                        inReserveEquipments: inReserveEquipments)
+                        inHandEquipments: createInHandEquipmentsAddingEquipment(equipment),
+                        inReserveEquipments: createInReserveEquipmentsAddingEquipment(equipment))
     }
     
-    private func canAddNewEquipment() -> Bool {
-        return inHandEquipments.count + inReserveEquipments.count < maximumEquipments
+    private func createInHandEquipmentsAddingEquipment(_ equipment: Equipment) -> [Equipment] {
+        return inHandEquipments + (canCarryNewEquipmentInHand() ? [equipment] : [])
     }
     
-    private func canAddNewEquipmentToInHand() -> Bool {
+    private func canCarryNewEquipmentInHand() -> Bool {
         return inHandEquipments.count < maximumInHandEquipments
+    }
+    
+    private func createInReserveEquipmentsAddingEquipment(_ equipment: Equipment) -> [Equipment] {
+        return inReserveEquipments + (canCarryNewEquipmentInReserve() ? [equipment] : [])
+    }
+
+    private func canCarryNewEquipmentInReserve() -> Bool {
+        return !canCarryNewEquipmentInHand() && inReserveEquipments.count < maximumEquipments - maximumInHandEquipments
     }
 }
 
