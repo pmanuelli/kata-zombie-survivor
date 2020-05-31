@@ -72,7 +72,7 @@ class SurvivorShould: XCTestCase {
     
     func test_carryUpToTwoEquipmentsInHandAndTheRestInReserve() {
         
-        survivor = aSurvivorCarring(equipments: baseballBat, fryingPan, katana)
+        survivor = carry(equipments: [baseballBat, fryingPan, katana], to: survivor)
         
         XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
         XCTAssertEqual([katana], survivor.inReserveEquipments)
@@ -80,40 +80,41 @@ class SurvivorShould: XCTestCase {
     
     func test_carryUpToFiveEquipments() {
         
-        survivor = aSurvivorCarring(equipments: baseballBat, fryingPan, katana, pistol, bottledWater, molotov)
+        survivor = carry(equipmentsCount: 5, to: survivor)
         
-        XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
-        XCTAssertEqual([katana, pistol, bottledWater], survivor.inReserveEquipments)
+        XCTAssertEqual(2, survivor.inHandEquipments.count)
+        XCTAssertEqual(3, survivor.inReserveEquipments.count)
     }
     
-    func test_carryUpToFourEquipmentsIfWoundedOnce() {
+    func test_reduceCarringCapacityByOneIfWounded() {
         
-        survivor = aSurvivor().wound()
+        survivor = survivor.wound()
+        survivor = carry(equipmentsCount: 5, to: survivor)
         
-        survivor = survivor
-            .carry(baseballBat)
-            .carry(fryingPan)
-            .carry(katana)
-            .carry(pistol)
-            .carry(bottledWater)
-        
-        XCTAssertEqual(survivor.inHandEquipments, [baseballBat, fryingPan])
-        XCTAssertEqual(survivor.inReserveEquipments, [katana, pistol])
+        XCTAssertEqual(2, survivor.inHandEquipments.count)
+        XCTAssertEqual(2, survivor.inReserveEquipments.count)
     }
-
-    private func aSurvivor() -> Survivor {
-        return Survivor(name: "Moulin")
-    }
+            
+    private func carry(equipments: [Equipment], to survivor: Survivor) -> Survivor {
         
-    private func aSurvivorCarring(equipments: Equipment...) -> Survivor {
-        
-        var survivor = Survivor(name: "Maroon")
+        var newSurvivor = survivor
         
         for equipment in equipments {
-            survivor = survivor.carry(equipment)
+            newSurvivor = newSurvivor.carry(equipment)
         }
         
-        return survivor
+        return newSurvivor
+    }
+        
+    private func carry(equipmentsCount: Int, to survior: Survivor) -> Survivor {
+        
+        var newSurvivor = survior
+        
+        for equipmentNumber in 1...equipmentsCount {
+            newSurvivor = newSurvivor.carry(Equipment(name: "Equipment \(equipmentNumber)"))
+        }
+        
+        return newSurvivor
     }
 }
 
