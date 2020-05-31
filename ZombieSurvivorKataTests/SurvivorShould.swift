@@ -60,13 +60,9 @@ class SurvivorShould: XCTestCase {
         let baseballBat = Equipment(name: "Baseball Bat")
         
         survivor = survivor.carry(baseballBat)
-        
-        let inHandEquipments = survivor.inHandEquipments
-        let inReserveEquipments = survivor.inReserveEquipments
-        
-        XCTAssertTrue(inHandEquipments.contains(baseballBat))
-        XCTAssertEqual(1, inHandEquipments.count)
-        XCTAssertTrue(inReserveEquipments.isEmpty)
+                
+        XCTAssertEqual([baseballBat], survivor.inHandEquipments)
+        XCTAssertEqual([], survivor.inReserveEquipments)
     }
     
     func test_carryUpToTwoEquipmentsInHandAndTheRestInReserve() {
@@ -77,8 +73,8 @@ class SurvivorShould: XCTestCase {
         
         survivor = survivor.carry(baseballBat).carry(fryingPan).carry(katana)
         
-        XCTAssertEqual(survivor.inHandEquipments, [baseballBat, fryingPan])
-        XCTAssertEqual(survivor.inReserveEquipments, [katana])
+        XCTAssertEqual([baseballBat, fryingPan], survivor.inHandEquipments)
+        XCTAssertEqual([katana], survivor.inReserveEquipments)
     }
 }
 
