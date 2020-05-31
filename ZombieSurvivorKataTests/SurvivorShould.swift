@@ -90,44 +90,37 @@ struct Survivor {
     let wounds: Int
     var isAlive: Bool { wounds < maximumWounds }
     let actionsPerTurn = 3
-    let inReserveEquipments: [Equipment]
     let inHandEquipments: [Equipment]
+    let inReserveEquipments: [Equipment]
     
     init(name: String) {
-        self.init(name: name, wounds: 0, inReserveEquipments: [], inHandEquipments: [])
+        self.init(name: name, wounds: 0, inHandEquipments: [], inReserveEquipments: [])
     }
     
-    private init(name: String, wounds: Int, inReserveEquipments: [Equipment], inHandEquipments: [Equipment]) {
+    private init(name: String, wounds: Int, inHandEquipments: [Equipment], inReserveEquipments: [Equipment]) {
         self.name = name
         self.wounds = wounds
-        self.inReserveEquipments = inReserveEquipments
         self.inHandEquipments = inHandEquipments
+        self.inReserveEquipments = inReserveEquipments
     }
     
     func wound() -> Survivor {
         return Survivor(name: name,
                         wounds: min(wounds + 1, maximumWounds),
-                        inReserveEquipments: inReserveEquipments,
-                        inHandEquipments: inHandEquipments)
+                        inHandEquipments: inHandEquipments,
+                        inReserveEquipments: inReserveEquipments)
     }
     
     func carry(_ equipment: Equipment) -> Survivor {
         
-        if inHandEquipments.count < 2 {
-            
-            return Survivor(name: name,
-                            wounds: wounds,
-                            inReserveEquipments: inReserveEquipments,
-                            inHandEquipments: inHandEquipments + [equipment])
-            
-        } else {
-            
-            return Survivor(name: name,
-                            wounds: wounds,
-                            inReserveEquipments: inReserveEquipments + [equipment],
-                            inHandEquipments: inHandEquipments)
-            
-        }
+        let allEquipment = inHandEquipments + inReserveEquipments + [equipment]
+        let inHandEquipment = Array(allEquipment.prefix(2))
+        let inReserveEquipment = Array(allEquipment.dropFirst(2))
+        
+        return Survivor(name: name,
+                        wounds: wounds,
+                        inHandEquipments: inHandEquipment,
+                        inReserveEquipments: inReserveEquipment)
     }
 }
 
