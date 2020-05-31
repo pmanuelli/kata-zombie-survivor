@@ -62,7 +62,11 @@ class SurvivorShould: XCTestCase {
         
         survivor = survivor.carry(baseballBat).carry(fryingPan)
         
-        XCTAssertEqual([baseballBat, fryingPan], survivor.equipments)
+        let equipments = survivor.equipments
+        
+        XCTAssertTrue(equipments.contains(baseballBat))
+        XCTAssertTrue(equipments.contains(fryingPan))
+        XCTAssertEqual(2, equipments.count)
     }
 }
 
