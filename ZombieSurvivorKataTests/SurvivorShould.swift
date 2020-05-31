@@ -55,18 +55,18 @@ class SurvivorShould: XCTestCase {
         XCTAssertEqual(3, survivor.actionsPerTurn)
     }
     
-    func test_carryEquipment() {
+    func test_carryEquipmentInReserve() {
         
         let baseballBat = Equipment(name: "Baseball Bat")
         let fryingPan = Equipment(name: "Frying Pan")
         
-        survivor = survivor.carry(baseballBat).carry(fryingPan)
+        survivor = survivor.carryInReserve(baseballBat).carryInReserve(fryingPan)
         
-        let equipments = survivor.equipments
+        let inReserveEquipments = survivor.inReserveEquipments
         
-        XCTAssertTrue(equipments.contains(baseballBat))
-        XCTAssertTrue(equipments.contains(fryingPan))
-        XCTAssertEqual(2, equipments.count)
+        XCTAssertTrue(inReserveEquipments.contains(baseballBat))
+        XCTAssertTrue(inReserveEquipments.contains(fryingPan))
+        XCTAssertEqual(2, inReserveEquipments.count)
     }
     
     func test_carryEquipmentInHand() {
@@ -90,30 +90,39 @@ struct Survivor {
     let wounds: Int
     var isAlive: Bool { wounds < maximumWounds }
     let actionsPerTurn = 3
-    let equipments: [Equipment]
+    let inReserveEquipments: [Equipment]
     let inHandEquipments: [Equipment]
     
     init(name: String) {
-        self.init(name: name, wounds: 0, equipments: [], inHandEquipments: [])
+        self.init(name: name, wounds: 0, inReserveEquipments: [], inHandEquipments: [])
     }
     
-    private init(name: String, wounds: Int, equipments: [Equipment], inHandEquipments: [Equipment]) {
+    private init(name: String, wounds: Int, inReserveEquipments: [Equipment], inHandEquipments: [Equipment]) {
         self.name = name
         self.wounds = wounds
-        self.equipments = equipments
+        self.inReserveEquipments = inReserveEquipments
         self.inHandEquipments = inHandEquipments
     }
     
     func wound() -> Survivor {
-        return Survivor(name: name, wounds: min(wounds + 1, maximumWounds), equipments: equipments, inHandEquipments: inHandEquipments)
+        return Survivor(name: name,
+                        wounds: min(wounds + 1, maximumWounds),
+                        inReserveEquipments: inReserveEquipments,
+                        inHandEquipments: inHandEquipments)
     }
     
-    func carry(_ equipment: Equipment) -> Survivor {
-        return Survivor(name: name, wounds: wounds, equipments: equipments + [equipment], inHandEquipments: inHandEquipments)
+    func carryInReserve(_ equipment: Equipment) -> Survivor {
+        return Survivor(name: name,
+                        wounds: wounds,
+                        inReserveEquipments: inReserveEquipments + [equipment],
+                        inHandEquipments: inHandEquipments)
     }
     
     func carryInHand(_ equipment: Equipment) -> Survivor {
-        return Survivor(name: name, wounds: wounds, equipments: equipments, inHandEquipments: inHandEquipments + [equipment])
+        return Survivor(name: name,
+                        wounds: wounds,
+                        inReserveEquipments: inReserveEquipments,
+                        inHandEquipments: inHandEquipments + [equipment])
     }
 }
 
