@@ -94,29 +94,22 @@ struct Equipments {
     }
     
     func add(_ equipment: Equipment) -> Equipments {
-        return Equipments(maximumCapacity: maximumCapacity, pieces: createPiecesAdding(equipment))
+        return Equipments(maximumCapacity: maximumCapacity,
+                          pieces: createPieces(from: pieces + [equipment], withMaximumCapacity: maximumCapacity))
     }
     
-    private func createPiecesAdding(_ equipment: Equipment) -> [Equipment] {
-        return haveRoomLeft() ? pieces + [equipment] : pieces
+    private func createPieces(from pieces: [Equipment], withMaximumCapacity maximumCapacity: Int) -> [Equipment] {
+        return Array(pieces.prefix(maximumCapacity))
     }
-    
-    private func haveRoomLeft() -> Bool {
-        return pieces.count < maximumCapacity
-    }
-    
+        
     func reduceMaximumCapacityByOne() -> Equipments {
         
-        return Equipments(maximumCapacity: decreasedCapacity(),
-                          pieces: createPieces(withCapacity: decreasedCapacity()))
+        return Equipments(maximumCapacity: decreasedMaximumCapacity(),
+                          pieces: createPieces(from: pieces, withMaximumCapacity: decreasedMaximumCapacity()))
     }
     
-    private func decreasedCapacity() -> Int {
+    private func decreasedMaximumCapacity() -> Int {
         return maximumCapacity - 1
-    }
-    
-    private func createPieces(withCapacity capacity: Int) -> [Equipment] {
-        return Array(pieces.prefix(capacity))
     }
 }
 
