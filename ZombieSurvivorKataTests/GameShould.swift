@@ -33,4 +33,23 @@ class GameShould: XCTestCase {
         
         XCTAssertEqual(1, game.numberOfSurvivors)
     }
+    
+    func test_endIfAllSurvivorsAreDead() {
+
+        let survivorGatorade = Survivor(name: "Gatorade")
+        let survivorLlaoLlao = Survivor(name: "Llao Llao")
+        
+        let gameWithNoSurvivors = Game()
+        let gameWithAliveSurvivor = gameWithNoSurvivors.addSurvivor(survivorGatorade)
+        let gameWithDeadSurvivor = gameWithAliveSurvivor
+            .woundSurvivor(named: survivorGatorade.name)
+            .woundSurvivor(named: survivorGatorade.name)
+        
+        let gameWithDeadAndAliveSurvivor = gameWithDeadSurvivor.addSurvivor(survivorLlaoLlao)
+
+        XCTAssertTrue(gameWithNoSurvivors.isEnded)
+        XCTAssertFalse(gameWithAliveSurvivor.isEnded)
+        XCTAssertTrue(gameWithDeadSurvivor.isEnded)
+        XCTAssertFalse(gameWithDeadAndAliveSurvivor.isEnded)
+    }
 }
