@@ -13,6 +13,9 @@
 		E95CBF452483150C004EF08C /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = E95CBF442483150C004EF08C /* README.md */; };
 		E95CBF4924840600004EF08C /* EquipmentsShould.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95CBF4824840600004EF08C /* EquipmentsShould.swift */; };
 		E95CBF4B24846010004EF08C /* GameShould.swift in Sources */ = {isa = PBXBuildFile; fileRef = E95CBF4A24846010004EF08C /* GameShould.swift */; };
+		E9A907742496F6C900649567 /* Survivor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A907732496F6C900649567 /* Survivor.swift */; };
+		E9A907762496F6F000649567 /* Equipments.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A907752496F6F000649567 /* Equipments.swift */; };
+		E9A907782496F75D00649567 /* Game.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9A907772496F75D00649567 /* Game.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +38,9 @@
 		E95CBF442483150C004EF08C /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		E95CBF4824840600004EF08C /* EquipmentsShould.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EquipmentsShould.swift; sourceTree = "<group>"; };
 		E95CBF4A24846010004EF08C /* GameShould.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameShould.swift; sourceTree = "<group>"; };
+		E9A907732496F6C900649567 /* Survivor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Survivor.swift; sourceTree = "<group>"; };
+		E9A907752496F6F000649567 /* Equipments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Equipments.swift; sourceTree = "<group>"; };
+		E9A907772496F75D00649567 /* Game.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Game.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +86,9 @@
 			children = (
 				E946BA4424830E1300C5A626 /* ZombieSurvivorKata.h */,
 				E946BA4524830E1300C5A626 /* Info.plist */,
+				E9A907732496F6C900649567 /* Survivor.swift */,
+				E9A907752496F6F000649567 /* Equipments.swift */,
+				E9A907772496F75D00649567 /* Game.swift */,
 			);
 			path = ZombieSurvivorKata;
 			sourceTree = "<group>";
@@ -204,7 +213,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9A907762496F6F000649567 /* Equipments.swift in Sources */,
 				E95CBF452483150C004EF08C /* README.md in Sources */,
+				E9A907742496F6C900649567 /* Survivor.swift in Sources */,
+				E9A907782496F75D00649567 /* Game.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -400,6 +412,7 @@
 		E946BA5924830E1300C5A626 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UW4KT7U5SP;
 				INFOPLIST_FILE = ZombieSurvivorKataTests/Info.plist;
@@ -418,6 +431,7 @@
 		E946BA5A24830E1300C5A626 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = UW4KT7U5SP;
 				INFOPLIST_FILE = ZombieSurvivorKataTests/Info.plist;
